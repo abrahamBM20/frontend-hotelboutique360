@@ -1,0 +1,100 @@
+:root {
+  --primary-color: #3b0764;    /* Morado oscuro para el Navbar */
+  --accent-color: #8b5cf6;     /* Lila/Violeta para botones principales */
+  --accent-hover: #7c3aed;     /* Lila oscuro al pasar el cursor */
+  --bg-color: #faf5ff;         /* Fondo blanco con un matiz lila ultra suave */
+  --card-bg: #ffffff;          /* Blanco puro para tarjetas */
+  --text-main: #1e1b4b;        /* Texto principal violeta muy oscuro */
+  --text-muted: #6b21a8;       /* Texto secundario en tono morado */
+  --border-color: #f3e8ff;     /* Bordes lila muy claro */
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-main);
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.main-layout {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.content-area {
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+}
+
+/* Tarjetas y Contenedores */
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px -2px rgba(139, 92, 246, 0.08);
+  margin-bottom: 20px;
+}
+
+/* Botones */
+.btn-primary {
+  background-color: var(--accent-color);
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-primary:hover {
+  background-color: var(--accent-hover);
+}
+
+.btn-secondary {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* Tablas */
+.table-custom {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+.table-custom th, .table-custom td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-color);
+  text-align: left;
+}
+
+.table-custom th {
+  background-color: #f3e8ff;
+  color: #581c87;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+}
+
+/* Badges / Etiquetas */
+.badge {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+.badge-success { background: #f3e8ff; color: #6b21a8; }
+.badge-warning { background: #fef3c7; color: #b45309; }
