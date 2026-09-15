@@ -29,7 +29,7 @@ export const App: React.FC = () => {
     setHealthLoading(true);
     setHealthResponse('');
     try {
-      const response = await axiosInstance.get('/api/health');
+      const response = await axiosInstance.get('/health');
       setHealthResponse(JSON.stringify(response.data, null, 2));
     } catch (error) {
       if (isAxiosError(error)) {

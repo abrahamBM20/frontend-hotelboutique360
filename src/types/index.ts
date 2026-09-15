@@ -1,7 +1,7 @@
 export type UserRole = 'ADMIN' | 'RECEPCIONISTA' | 'HUESPED' | 'GUEST';
 
 export interface Room {
-  id: number;
+  id: string;
   roomNumber: string;
   roomType: string;
   pricePerNight: number;
@@ -16,6 +16,7 @@ export interface RoomRequest {
   pricePerNight: number;
   isAvailable: boolean;
   description?: string;
+  imageUrl?: string;
 }
 
 export interface Reservation {

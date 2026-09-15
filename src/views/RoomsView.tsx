@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { isAxiosError } from 'axios';
+import axiosInstance from '../api/axiosInstance';
 import type { Room, UserRole } from '../types';
 
 interface RoomsProps {
@@ -8,23 +10,37 @@ interface RoomsProps {
 export const RoomsView: React.FC<RoomsProps> = ({ userRoles }) => {
   const isAdmin = userRoles.includes('ADMIN');
 
-  // 1. Estado local de Habitaciones (Simulando la base de datos)
-  const [rooms, setRooms] = useState<Room[]>([
-    { 
-      id: 1, roomNumber: '101', roomType: 'SUITE', pricePerNight: 150.00, isAvailable: true,
-      imageUrl: 'https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=300&q=80'
-    },
-    { 
-      id: 2, roomNumber: '102', roomType: 'DOUBLE', pricePerNight: 90.00, isAvailable: false,
-      imageUrl: 'https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=300&q=80'
-    },
-  ]);
+  const [rooms, setRooms] = useState<Room[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [isSaving, setIsSaving] = useState(false);
+
+  const getErrorMessage = (error: unknown) => {
+    if (isAxiosError(error)) {
+      return `HTTP ${error.response?.status ?? 'sin respuesta'}: ${typeof error.response?.data === 'string' ? error.response.data : error.message}`;
+    }
+    return error instanceof Error ? error.message : 'Error desconocido';
+  };
+
+  useEffect(() => {
+    const loadRooms = async () => {
+      try {
+        const response = await axiosInstance.get<Room[]>('/api/v1/rooms');
+        setRooms(response.data);
+      } catch (error) {
+        setErrorMessage(getErrorMessage(error));
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    void loadRooms();
+  }, []);
 
   // 2. Estados para el Modal y el Formulario
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState<Partial<Room>>({});
 
-  // 3. Funciones CRUD simuladas (Memoria local)
   const openModal = (room?: Room) => {
     if (room) {
       setFormData(room); // Modo Edición
@@ -50,23 +66,45 @@ export const RoomsView: React.FC<RoomsProps> = ({ userRoles }) => {
     }));
   };
 
-  const handleSave = (e: React.FormEvent) => {
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (formData.id) {
-      // MOCK UPDATE: Actualizar habitación existente
-      setRooms((prev) => prev.map((r) => (r.id === formData.id ? { ...r, ...formData } as Room : r)));
-    } else {
-      // MOCK CREATE: Crear nueva habitación con ID aleatorio
-      const newRoom = { ...formData, id: Date.now() } as Room;
-      setRooms((prev) => [...prev, newRoom]);
+    setIsSaving(true);
+    setErrorMessage('');
+
+    const request = {
+      roomNumber: formData.roomNumber ?? '',
+      roomType: formData.roomType ?? 'SINGLE',
+      pricePerNight: formData.pricePerNight ?? 0,
+      isAvailable: formData.isAvailable ?? true,
+      description: formData.description,
+      imageUrl: formData.imageUrl,
+    };
+
+    try {
+      if (formData.id) {
+        const response = await axiosInstance.put<Room>(`/api/v1/rooms/${formData.id}`, request);
+        setRooms((previous) => previous.map((room) => room.id === response.data.id ? response.data : room));
+      } else {
+        const response = await axiosInstance.post<Room>('/api/v1/rooms', request);
+        setRooms((previous) => [...previous, response.data]);
+      }
+      closeModal();
+    } catch (error) {
+      setErrorMessage(getErrorMessage(error));
+    } finally {
+      setIsSaving(false);
     }
-    closeModal();
   };
 
-  const handleDelete = (id: number) => {
+  const handleDelete = async (id: string) => {
     if (window.confirm('¿Estás seguro de que deseas eliminar esta habitación?')) {
-      // MOCK DELETE: Filtrar la habitación eliminada
-      setRooms((prev) => prev.filter((r) => r.id !== id));
+      setErrorMessage('');
+      try {
+        await axiosInstance.delete(`/api/v1/rooms/${id}`);
+        setRooms((previous) => previous.filter((room) => room.id !== id));
+      } catch (error) {
+        setErrorMessage(getErrorMessage(error));
+      }
     }
   };
 
@@ -80,8 +118,11 @@ export const RoomsView: React.FC<RoomsProps> = ({ userRoles }) => {
         )}
       </div>
 
+      {errorMessage && <p role="alert" style={{ color: '#b91c1c' }}>{errorMessage}</p>}
+      {isLoading && <p>Cargando habitaciones...</p>}
+
       {/* Grid de Habitaciones */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px' }}>
+      {!isLoading && <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px' }}>
         {rooms.map((room) => (
           <div key={room.id} className="card" style={{ padding: '0', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
             <img 
@@ -121,7 +162,7 @@ export const RoomsView: React.FC<RoomsProps> = ({ userRoles }) => {
             </div>
           </div>
         ))}
-      </div>
+      </div>}
 
       {/* Modal CRUD (Solo se renderiza si está abierto) */}
       {isModalOpen && (
@@ -160,6 +201,19 @@ export const RoomsView: React.FC<RoomsProps> = ({ userRoles }) => {
               </div>
 
               <div>
+                <label htmlFor="description" style={{ display: 'block', marginBottom: '5px', color: '#6b21a8', fontWeight: 'bold' }}>Descripción</label>
+                <textarea
+                  id="description"
+                  name="description"
+                  value={formData.description || ''}
+                  onChange={handleChange}
+                  rows={3}
+                  placeholder="Describe la habitación, sus servicios o características"
+                  style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid #f3e8ff', boxSizing: 'border-box', resize: 'vertical' }}
+                />
+              </div>
+
+              <div>
                 <label style={{ display: 'block', marginBottom: '5px', color: '#6b21a8', fontWeight: 'bold' }}>URL de la Imagen</label>
                 <input type="url" name="imageUrl" value={formData.imageUrl || ''} onChange={handleChange} placeholder="https://..."
                        style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid #f3e8ff', boxSizing: 'border-box' }} />
@@ -174,8 +228,8 @@ export const RoomsView: React.FC<RoomsProps> = ({ userRoles }) => {
                 <button type="button" onClick={closeModal} style={{ flex: 1, padding: '10px', backgroundColor: 'transparent', border: '1px solid #6b21a8', color: '#6b21a8', borderRadius: '8px', cursor: 'pointer' }}>
                   Cancelar
                 </button>
-                <button type="submit" className="btn-primary" style={{ flex: 1 }}>
-                  Guardar
+                <button type="submit" className="btn-primary" style={{ flex: 1 }} disabled={isSaving}>
+                  {isSaving ? 'Guardando...' : 'Guardar'}
                 </button>
               </div>
             </form>

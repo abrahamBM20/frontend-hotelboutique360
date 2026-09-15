@@ -19,8 +19,8 @@ axiosInstance.interceptors.request.use(
       const oidcRawData = sessionStorage.getItem(oidcStorageKey);
       if (oidcRawData) {
         const user = JSON.parse(oidcRawData);
-        if (user?.access_token) {
-          config.headers.set('Authorization', `Bearer ${user.access_token}`);
+        if (user?.id_token) {
+          config.headers.set('Authorization', `Bearer ${user.id_token}`);
         }
       }
     }
