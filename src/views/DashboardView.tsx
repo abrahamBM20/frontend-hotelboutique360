@@ -21,7 +21,7 @@ export const DashboardView: React.FC<DashboardProps> = ({ userRoles }) => {
           Métricas globales e ingresos del Hotel Boutique.
         </p>
 
-        {/* Los datos vienen del BFF -> Lambda 'reservation-query' -> PostgreSQL */}
+        {/* Los datos vienen del BFF -> ms-hotel-rooms -> PostgreSQL */}
         <ReservationSummaryPanel userRoles={userRoles} />
       </div>
     );

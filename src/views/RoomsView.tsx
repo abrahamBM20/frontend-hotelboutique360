@@ -179,8 +179,11 @@ export const RoomsView: React.FC<RoomsProps> = ({ userRoles }) => {
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-        <h2 style={{ color: '#3b0764' }}>Catálogo de Habitaciones</h2>
+      <div className="page-heading">
+        <div>
+          <h2 className="page-title">Catálogo de Habitaciones</h2>
+          <p className="page-subtitle">Explora y administra las habitaciones disponibles.</p>
+        </div>
         
         {isAdmin && (
           <button className="btn-primary" onClick={() => openModal()}>+ Nueva Habitación</button>
@@ -193,15 +196,16 @@ export const RoomsView: React.FC<RoomsProps> = ({ userRoles }) => {
 
       {/* Grid de Habitaciones */}
       {!isLoading && (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px' }}>
+        <div className="rooms-grid">
           {rooms.map((room) => (
-            <div key={room.id} className="card" style={{ padding: '0', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
-              <img 
+            <div key={room.id} className="card room-card">
+              <img
+                className="room-image"
                 src={room.imageUrl || 'https://via.placeholder.com/300x200?text=Sin+Imagen'} 
                 alt={`Habitación ${room.roomNumber}`} 
                 style={{ width: '100%', height: '200px', objectFit: 'cover' }}
               />
-              <div style={{ padding: '20px', flex: 1, display: 'flex', flexDirection: 'column' }}>
+              <div className="room-card-content">
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <h3 style={{ margin: '0', color: '#3b0764' }}>Hab. {room.roomNumber}</h3>
                   <span className={`badge ${room.isAvailable ? 'badge-success' : 'badge-warning'}`}>
@@ -243,12 +247,12 @@ export const RoomsView: React.FC<RoomsProps> = ({ userRoles }) => {
 
       {/* Modal CRUD */}
       {isModalOpen && (
-        <div style={{
+        <div className="modal-shell" style={{
           position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, 
           backgroundColor: 'rgba(59, 7, 100, 0.4)', backdropFilter: 'blur(4px)',
           display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 999
         }}>
-          <div className="card" style={{ width: '100%', maxWidth: '450px', padding: '30px' }}>
+          <div className="card modal-card">
             <h3 style={{ color: '#3b0764', marginTop: 0 }}>
               {formData.id ? 'Editar Habitación' : 'Nueva Habitación'}
             </h3>
@@ -346,12 +350,12 @@ export const RoomsView: React.FC<RoomsProps> = ({ userRoles }) => {
 
       {/* Modal de Reserva (el catálogo público ofrece "Reservar Ahora") */}
       {bookingRoom && (
-        <div style={{
+        <div className="modal-shell" style={{
           position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
           backgroundColor: 'rgba(59, 7, 100, 0.4)', backdropFilter: 'blur(4px)',
           display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 999
         }}>
-          <div className="card" style={{ width: '100%', maxWidth: '400px', padding: '30px' }}>
+          <div className="card modal-card">
             <h3 style={{ color: '#3b0764', marginTop: 0 }}>
               Reservar habitación {bookingRoom.roomNumber}
             </h3>

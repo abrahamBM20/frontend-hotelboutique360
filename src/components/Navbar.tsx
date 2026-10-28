@@ -11,33 +11,25 @@ export const Navbar: React.FC<NavbarProps> = ({ userRoles }) => {
   const auth = useAuth();
 
   return (
-    <header style={{
-      height: '64px',
-      backgroundColor: '#2b153d',
-      color: 'white',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      padding: '0 24px'
-    }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+    <header className="top-navbar">
+      <div className="brand-lockup">
         <Hotel color="#bd06d9" size={28} />
-        <span style={{ fontSize: '1.25rem', fontWeight: 'bold' }}>
+        <span className="brand-name">
           HOTEL BOUTIQUE <span style={{ color: '#bd06d9' }}>360</span>
         </span>
       </div>
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+      <div className="account-area">
         {auth.isAuthenticated ? (
           <>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div className="account-summary">
               <User size={18} color="#d97706" />
-              <span style={{ fontSize: '0.9rem' }}>{auth.user?.profile.email}</span>
+              <span className="account-email">{auth.user?.profile.email}</span>
               <span className="badge badge-warning">{userRoles[0] || 'HUESPED'}</span>
             </div>
             <button 
               onClick={() => void auth.removeUser()} 
-              style={{ background: 'transparent', border: '1px solid #d97706', color: 'white', padding: '6px 12px', borderRadius: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
+              className="logout-button"
             >
               <LogOut size={16} /> Salir
             </button>

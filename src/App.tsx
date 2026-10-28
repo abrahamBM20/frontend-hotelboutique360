@@ -62,14 +62,14 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', backgroundColor: '#fafafa' }}>
+    <div className="app-shell">
       
       <Navbar userRoles={userRoles} />
 
       <button
         onClick={() => setIsSidebarOpen(true)}
         aria-label="Abrir menú"
-        style={{ position: 'fixed', top: '76px', left: '20px', zIndex: 20 }}
+        className="menu-toggle btn btn-light shadow-sm"
       >
         <Menu size={22} />
       </button>
@@ -84,12 +84,12 @@ export const App: React.FC = () => {
       />
 
       {/* CONTENIDO PRINCIPAL */}
-      <main style={{ flex: 1, padding: '20px', overflowY: 'auto' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+      <main className="content-area">
+        <div className="container-fluid content-container">
           {auth.isLoading && <p>Cargando sesión de Cognito...</p>}
           {auth.error && <p>Error de Cognito: {auth.error.message}</p>}
           {auth.isAuthenticated && (
-            <section className="card" style={{ marginBottom: '20px' }}>
+            <section className="card connection-card">
               <h2>Prueba de conexión</h2>
               <p>Sesión activa: {auth.user?.profile.email ?? 'usuario autenticado'}</p>
               <button className="btn-primary" onClick={() => void checkHealth()} disabled={healthLoading}>
