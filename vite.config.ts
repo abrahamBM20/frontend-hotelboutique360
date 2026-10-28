@@ -9,8 +9,8 @@ export default defineConfig(({ mode }) => {
 
   return {
     plugins: [react()],
-    // Solo `npm run dev`. Con VITE_API_BASE='' el front llama a /api en su propio origen y Vite lo reenvía
-    // al BFF local, agregando el secreto que en AWS inyecta el API Gateway (el BFF no tiene CORS propio).
+    // Solo `npm run dev`. Con VITE_API_BASE='' el front llama a /api en su propio origen
+    // y Vite lo reenvía al BFF local, agregando el secreto para las rutas protegidas.
     server: {
       proxy: {
         '/api': {

@@ -202,23 +202,14 @@ export const ReservationsView: React.FC = () => {
 
   return (
     <div>
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginBottom: '20px',
-          gap: '12px',
-          flexWrap: 'wrap',
-        }}
-      >
+      <div className="page-heading">
         <div>
-          <h2 style={{ color: '#3b0764', margin: 0 }}>Gestión de Reservas</h2>
-          <p style={{ color: '#6b21a8', marginTop: '5px' }}>
+          <h2 className="page-title">Gestión de Reservas</h2>
+          <p className="page-subtitle">
             Control de ingresos y salidas del día.
           </p>
         </div>
-        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+        <div className="page-actions">
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value as ReservationStatus | '')}
@@ -250,7 +241,7 @@ export const ReservationsView: React.FC = () => {
       {isLoading && <p>Cargando reservas...</p>}
 
       {/* Tabla de Reservas */}
-      <div className="card" style={{ overflowX: 'auto' }}>
+      <div className="card responsive-table">
         <table className="table-custom">
           <thead>
             <tr>
@@ -340,6 +331,7 @@ export const ReservationsView: React.FC = () => {
       {/* Modal para Nueva Reserva */}
       {isModalOpen && (
         <div
+          className="modal-shell"
           style={{
             position: 'fixed',
             top: 0,
@@ -354,7 +346,7 @@ export const ReservationsView: React.FC = () => {
             zIndex: 999,
           }}
         >
-          <div className="card" style={{ width: '100%', maxWidth: '400px', padding: '30px' }}>
+          <div className="card modal-card">
             <h3 style={{ color: '#3b0764', marginTop: 0 }}>Crear Nueva Reserva</h3>
 
             <form onSubmit={handleSave} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
