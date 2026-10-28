@@ -27,8 +27,8 @@ export type ReservationStatus =
   | 'CANCELADA';
 
 /**
- * Reserva de habitación. La devuelve el BFF (que a su vez la pide a la Lambda
- * 'reservation-query'). Los campos opcionales vienen null cuando el dato no aplica.
+ * Reserva de habitación. La devuelve el BFF, que la obtiene de forma síncrona
+ * desde ms-hotel-rooms. Los campos opcionales vienen null cuando el dato no aplica.
  */
 export interface Reservation {
   id: string;

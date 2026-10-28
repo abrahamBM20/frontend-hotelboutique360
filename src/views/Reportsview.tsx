@@ -24,7 +24,7 @@ export const ReportsView: React.FC = () => {
       </div>
 
       {/* Tarjetas Superiores de KPIs */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px', marginBottom: '30px' }}>
+      <div className="report-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px', marginBottom: '30px' }}>
         <div className="card" style={{ borderLeft: '4px solid #8b5cf6' }}>
           <h4 style={{ color: '#6b21a8', margin: '0 0 10px 0', fontSize: '0.9rem', textTransform: 'uppercase' }}>Ingresos Totales</h4>
           <p style={{ fontSize: '2rem', fontWeight: 'bold', color: '#3b0764', margin: '0' }}>
@@ -58,7 +58,7 @@ export const ReportsView: React.FC = () => {
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '20px' }}>
+      <div className="report-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '20px' }}>
         {/* Gráfico de barras simulado (Ingresos por tipo) */}
         <div className="card">
           <h3 style={{ color: '#3b0764', marginTop: 0, marginBottom: '20px' }}>Ingresos por Tipo de Habitación</h3>

@@ -16,7 +16,7 @@ const money = (value: number) =>
  * Panel de reservas con datos reales.
  *
  * Todo pasa por el BFF: el frontend pide GET /api/v1/reservations y el BFF lo resuelve
- * invocando la Lambda 'reservation-query'. Para un huésped (sin rol de staff) el BFF
+ * delegando en ms-hotel-rooms. Para un huésped (sin rol de staff) el BFF
  * devuelve solo sus propias reservas.
  */
 export default function ReservationSummaryPanel({ userRoles }: PanelProps) {

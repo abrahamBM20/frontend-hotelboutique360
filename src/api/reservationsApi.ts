@@ -13,8 +13,8 @@ export interface ReservationFilters {
 }
 
 /**
- * Lista las reservas. El BFF se encarga de filtrar: un huésped que no es staff
- * solo recibe las suyas, aunque pida otros filtros.
+ * Lista las reservas. El BFF filtra por usuario y ms-hotel-rooms consulta
+ * síncronamente la tabla compartida.
  */
 export const listReservations = async (
   filters: ReservationFilters = {}
